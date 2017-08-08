@@ -19,20 +19,31 @@ public class PlayerController : MonoBehaviour
         Vector3 l_Direction = Vector3.zero;
         float l_DesiredAngle = transform.rotation.eulerAngles.y;
         bool l_NewAngle = false;
+        float l_HorizontalAxis = Input.GetAxis("Horizontal");
+        float l_VerticalAxis = Input.GetAxis("Vertical");
+        bool l_FirePressed = Input.GetButton("Fire1");
 
-        if (Input.GetKey(KeyCode.D))
+        if (l_FirePressed)
+        {
+            Debug.Log("Shooting");
+        }
+
+        //if (Input.GetKey(KeyCode.D))
+        if (l_HorizontalAxis > 0.0f)
         {
             l_NewAngle = true;
             l_DesiredAngle = 90.0f;
             l_Direction.x = 1.0f;
         }
-        else if (Input.GetKey(KeyCode.A))
+        //else if (Input.GetKey(KeyCode.A))
+        else if (l_HorizontalAxis < 0.0f)
         {
             l_NewAngle = true;
             l_DesiredAngle = -90.0f;
             l_Direction.x = -1.0f;
         }
-        if (Input.GetKey(KeyCode.W))
+        //if (Input.GetKey(KeyCode.W))
+        if (l_VerticalAxis > 0.0f)
         {
             if (l_NewAngle)
             {
@@ -52,7 +63,8 @@ public class PlayerController : MonoBehaviour
 
             l_Direction.z = 1.0f;
         }
-        else if (Input.GetKey(KeyCode.S))
+        //else if (Input.GetKey(KeyCode.S))
+        else if (l_VerticalAxis < 0.0f)
         {
             if (l_NewAngle)
             {
