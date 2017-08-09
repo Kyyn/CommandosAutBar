@@ -8,6 +8,11 @@ public class PlayerController : MonoBehaviour
     CharacterController m_CharacterController;
     Animator m_Animator;
 
+    public int m_Score = 0;
+    public int m_Grenades = 2;
+    public int m_Lifes = 3;
+
+
     // Use this for initialization
     void Start () 
 	{
@@ -98,4 +103,17 @@ public class PlayerController : MonoBehaviour
 
         transform.rotation = Quaternion.Lerp (transform.rotation, Quaternion.Euler(0.0f, l_DesiredAngle, 0.0f), Mathf.Min(1, Time.deltaTime/0.1f));
 	}
+
+    public void AddGrenade()
+    {
+        ++m_Grenades;
+    }
+    public void AddLife()
+    {
+        ++m_Lifes;
+    }
+    public void AddScore(int Amount)
+    {
+        m_Score += Amount;
+    }
 }
