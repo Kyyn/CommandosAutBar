@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour 
 {
-    public float m_Speed;
+    //public float m_Speed;
     CharacterController m_CharacterController;
     Animator m_Animator;
 
     public int m_Score = 0;
     public int m_Grenades = 2;
     public int m_Lifes = 3;
+    public GameObject m_AmmoPrefab;
+    public float m_ShootRate = 1.0f;
+    float m_CurrentShootTime = 0.0f;
+    public AmmoContainer m_AmmoContainer;
+    public Transform m_OutputAmmo;
+
 
 
     // Use this for initialization
@@ -18,7 +24,8 @@ public class PlayerController : MonoBehaviour
 	{
         m_CharacterController = GetComponent<CharacterController>();
         m_Animator = GetComponent<Animator>();
-	}
+        m_CurrentShootTime = 0.0f;
+    }
 	
 	// Update is called once per frame
 	void Update () 
@@ -33,6 +40,13 @@ public class PlayerController : MonoBehaviour
 
         m_Animator.SetBool("Shoot", l_FirePressed);
         m_Animator.SetBool("ThrowGrenade", l_ThrowGrenadePressed);
+
+        m_CurrentShootTime -= Time.deltaTime;
+
+        if (l_FirePressed && CanShoot())
+        {
+            Shoot(transform.forward);
+        }
         /*if (l_FirePressed)
         {
             Debug.Log("Shooting");
@@ -115,5 +129,24 @@ public class PlayerController : MonoBehaviour
     public void AddScore(int Amount)
     {
         m_Score += Amount;
+    }
+    public void Kill()
+    {
+        --m_Lifes;
+        Restart();
+    }
+    void Restart()
+    {
+
+    }
+    bool CanShoot()
+    {
+        return m_CurrentShootTime <= 0.0f;
+    }
+    void Shoot(Vector3 Direction)
+    {
+        m_CurrentShootTime = m_ShootRate;
+
+        m_AmmoContainer.AddAmmo(m_AmmoPrefab, m_OutputAmmo.position, Direction);
     }
 }
