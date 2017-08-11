@@ -16,7 +16,13 @@ public class PlayerController : MonoBehaviour
     float m_CurrentShootTime = 0.0f;
     public AmmoContainer m_AmmoContainer;
     public Transform m_OutputAmmo;
-
+    public GameObject m_GrenadePrefab;
+    GameObject m_CurrentGrenade;
+    public Transform m_OutputGrenadeTransform;
+    int l_ThrowGrenadeIdAnimation = Animator.StringToHash("ThrowGrenade");
+    public float m_GrenadeSpeedXZ;
+    public float m_GrenadeSpeedY;
+    bool m_CanShootGrenade;
 
 
     // Use this for initialization
@@ -25,6 +31,7 @@ public class PlayerController : MonoBehaviour
         m_CharacterController = GetComponent<CharacterController>();
         m_Animator = GetComponent<Animator>();
         m_CurrentShootTime = 0.0f;
+        m_CanShootGrenade = true;
     }
 	
 	// Update is called once per frame
@@ -39,8 +46,7 @@ public class PlayerController : MonoBehaviour
         bool l_ThrowGrenadePressed = Input.GetButton("Fire2");
 
         m_Animator.SetBool("Shoot", l_FirePressed);
-        m_Animator.SetBool("ThrowGrenade", l_ThrowGrenadePressed);
-
+        
         m_CurrentShootTime -= Time.deltaTime;
 
         if (l_FirePressed && CanShoot())
@@ -109,6 +115,42 @@ public class PlayerController : MonoBehaviour
         }
 
         m_Animator.SetFloat("Movement", l_Direction.magnitude);
+        AnimatorStateInfo l_AnimatorStateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
+
+
+
+        if (m_CanShootGrenade && l_AnimatorStateInfo.shortNameHash != l_ThrowGrenadeIdAnimation && m_Grenades > 0 && l_ThrowGrenadePressed)
+        {
+            m_Animator.SetBool("ThrowGrenade", l_ThrowGrenadePressed);
+            ThrowGrenade();
+        }
+        else
+        {
+            m_Animator.SetBool("ThrowGrenade", false);
+        }
+        
+        if (m_CurrentGrenade != null && l_AnimatorStateInfo.shortNameHash == l_ThrowGrenadeIdAnimation)
+        {
+            Debug.Log("nova");
+            if (l_AnimatorStateInfo.normalizedTime >= 0.5f)
+            {
+                m_CurrentGrenade.GetComponent<Rigidbody>().isKinematic = false;
+                Vector3 l_ForwardXZ = transform.forward;
+                l_ForwardXZ.y = 0.0f;
+                m_CurrentGrenade.GetComponent<Rigidbody>().velocity = m_GrenadeSpeedXZ * transform.forward + Vector3.up * m_GrenadeSpeedY;
+                m_CurrentGrenade.GetComponent<GrenadeController>().enabled = true;
+                m_CurrentGrenade = null;
+            }
+            else
+            {
+                m_CurrentGrenade.transform.position = m_OutputGrenadeTransform.position;
+            }
+
+        }
+        if (l_AnimatorStateInfo.fullPathHash != l_ThrowGrenadeIdAnimation && m_CurrentGrenade == null && !m_CanShootGrenade)
+        {
+            m_CanShootGrenade = true;
+        }
 
         //l_Direction.Normalize();
         //Vector3 l_Movement = l_Direction * m_Speed * Time.deltaTime;
@@ -149,4 +191,13 @@ public class PlayerController : MonoBehaviour
 
         m_AmmoContainer.AddAmmo(m_AmmoPrefab, m_OutputAmmo.position, Direction);
     }
+    void ThrowGrenade()
+    {
+        --m_Grenades;
+        m_CurrentGrenade = GameObject.Instantiate(m_GrenadePrefab, m_OutputGrenadeTransform.position, Quaternion.identity) as GameObject;
+        m_CurrentGrenade.GetComponent<Rigidbody>().isKinematic = true;
+        m_CurrentGrenade.GetComponent<GrenadeController>().enabled = false;
+        m_CanShootGrenade = false;
+    }
 }
+
