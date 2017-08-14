@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour
         //l_Direction.Normalize();
         //Vector3 l_Movement = l_Direction * m_Speed * Time.deltaTime;
 
-        //m_CharacterController.Move(l_Movement);
+        m_CharacterController.Move(Physics.gravity * Time.deltaTime);
 
         transform.rotation = Quaternion.Lerp (transform.rotation, Quaternion.Euler(0.0f, l_DesiredAngle, 0.0f), Mathf.Min(1, Time.deltaTime/0.1f));
 	}
