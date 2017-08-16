@@ -37,6 +37,10 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+        if (m_Animator.GetBool ("Dead"))
+        {
+            return;
+        }
         Vector3 l_Direction = Vector3.zero;
         float l_DesiredAngle = transform.rotation.eulerAngles.y;
         bool l_NewAngle = false;
@@ -174,6 +178,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Kill()
     {
+        m_Animator.SetBool("Dead", true);
         --m_Lifes;
         Restart();
     }

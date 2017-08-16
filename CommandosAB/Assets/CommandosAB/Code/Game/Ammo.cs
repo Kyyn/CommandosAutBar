@@ -39,5 +39,10 @@ public class Ammo : MonoBehaviour
         {
             collision.gameObject.GetComponent<PlayerController>().Kill();
         }
+        else if (collision.gameObject.tag == "Enemy" && m_Type == TAmmoType.PLAYER)
+        {
+            collision.gameObject.GetComponent<CAIController>().Kill();
+        }
+        GameObject.Destroy(gameObject);
     }
 }
