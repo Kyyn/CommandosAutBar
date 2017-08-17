@@ -135,7 +135,6 @@ public class PlayerController : MonoBehaviour
         
         if (m_CurrentGrenade != null && l_AnimatorStateInfo.shortNameHash == l_ThrowGrenadeIdAnimation)
         {
-            Debug.Log("nova");
             if (l_AnimatorStateInfo.normalizedTime >= 0.5f)
             {
                 m_CurrentGrenade.GetComponent<Rigidbody>().isKinematic = false;
@@ -203,6 +202,14 @@ public class PlayerController : MonoBehaviour
         m_CurrentGrenade.GetComponent<Rigidbody>().isKinematic = true;
         m_CurrentGrenade.GetComponent<GrenadeController>().enabled = false;
         m_CanShootGrenade = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Explossion")
+        {
+            Kill();
+        }
     }
 }
 

@@ -6,7 +6,7 @@ public class GrenadeController : MonoBehaviour
 {
     public GameObject m_ExplossionPrebaf;
     float m_CurrentTime = 0.0f;
-    public float m_TimeToExplode = 0.5f;
+    public float m_TimeToExplode = 0.2f;
 
 	
 	void Start ()
@@ -26,7 +26,7 @@ public class GrenadeController : MonoBehaviour
         {
             GameObject l_Explossion = GameObject.Instantiate(m_ExplossionPrebaf, transform.position, Quaternion.identity) as GameObject;
             GameObject.Destroy(this.gameObject);
-            GameObject.Destroy(l_Explossion, 3.0f);
+            GameObject.Destroy(l_Explossion, 5.0f);
         }
 
 

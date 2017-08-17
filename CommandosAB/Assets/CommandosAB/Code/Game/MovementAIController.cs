@@ -93,6 +93,7 @@ public class MovementAIController : CAIController
     {
         m_Animator.SetBool("Dead", true);
         m_CharacterController.enabled = false;
+        m_PlayerController.AddScore(300);
     }
     bool IsOnScreen()
     {
@@ -110,4 +111,13 @@ public class MovementAIController : CAIController
         m_NavMeshAgent.updateRotation = true;
         m_NavMeshAgent.updatePosition = false;
     }
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Explossion")
+        {
+            Debug.Log("nova2");
+            Kill();
+        }
+    }
+    
 }

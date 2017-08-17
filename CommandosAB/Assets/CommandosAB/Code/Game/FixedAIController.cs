@@ -63,10 +63,19 @@ public class FixedAIController : CAIController
     {
         m_Animator.SetBool("Dead", true);
         m_CharacterController.enabled = false;
+        m_PlayerController.AddScore(100);
     }
     bool IsOnScreen()
     {
         Vector3 l_Position = Camera.main.WorldToViewportPoint(transform.position);
         return l_Position.y >= 0.0f && l_Position.y <= 1.0f;
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Explossion")
+        {
+            Debug.Log("nova2");
+            Kill();
+        }
     }
 }

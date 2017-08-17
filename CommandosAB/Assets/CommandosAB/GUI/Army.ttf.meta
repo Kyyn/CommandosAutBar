@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: b458b937209e6b04e93596b709ba5c31
+timeCreated: 1502959101
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Army
+  fontNames:
+  - Army
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
