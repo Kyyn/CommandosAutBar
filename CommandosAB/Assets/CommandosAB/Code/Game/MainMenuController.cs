@@ -8,6 +8,8 @@ public class MainMenuController : MonoBehaviour
 {
     public Texture2D m_LogoTexture;
     public GUISkin m_Skin;
+    public AudioClip m_FXSound;
+
     // Use this for initialization
     void Start ()
 	{
@@ -19,6 +21,7 @@ public class MainMenuController : MonoBehaviour
 	{
 		if (Input.GetButtonUp("Fire1"))
         {
+            GetComponent<AudioSource>().PlayOneShot(m_FXSound);
             SceneManager.LoadScene("GameScene");
         }
 	}
