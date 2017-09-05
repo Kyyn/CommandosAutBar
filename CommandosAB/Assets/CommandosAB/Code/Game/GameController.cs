@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
     public PlayerController m_PlayerController;
     public GUISkin m_Skin;
     float m_CurentTime;
+    List<CAIController> m_Enemies = new List<CAIController>();
 
     // Use this for initialization
     void Start ()
@@ -42,5 +43,17 @@ public class GameController : MonoBehaviour
             GUI.DrawTexture(GUIController.GetRectangleGUI(0.05f + i * 0.042f, 0.85f, 0.04140625f, 0.06666666f), m_LifeTexture);
         }
 
+    }
+    public void RestartGame()
+    {
+        Camera.main.GetComponent<CameraController>().RestartGame();
+        foreach (CAIController l_AIController in m_Enemies)
+        {
+            l_AIController.RestartGame();
+        }
+    }
+    public void AddEnemy(CAIController AIController)
+    {
+        m_Enemies.Add(AIController);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour 
 {
@@ -20,9 +21,12 @@ public class PlayerController : MonoBehaviour
     GameObject m_CurrentGrenade;
     public Transform m_OutputGrenadeTransform;
     int l_ThrowGrenadeIdAnimation = Animator.StringToHash("ThrowGrenade");
+    int l_DeadIdAnimation = Animator.StringToHash("Dead");
     public float m_GrenadeSpeedXZ;
     public float m_GrenadeSpeedY;
     bool m_CanShootGrenade;
+    Vector3 m_StartPosition;
+    Quaternion m_StartRotation;
 
 
     // Use this for initialization
@@ -32,13 +36,21 @@ public class PlayerController : MonoBehaviour
         m_Animator = GetComponent<Animator>();
         m_CurrentShootTime = 0.0f;
         m_CanShootGrenade = true;
+        m_CurrentGrenade = null;
+        m_StartRotation = transform.rotation;
+        m_StartPosition = transform.position;
     }
 	
 	// Update is called once per frame
 	void Update () 
 	{
+        AnimatorStateInfo l_AnimatorStateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
         if (m_Animator.GetBool ("Dead"))
         {
+            if (l_AnimatorStateInfo.shortNameHash == l_DeadIdAnimation && l_AnimatorStateInfo.normalizedTime >= 1.0f)
+            {
+                RestartGame();
+            }
             return;
         }
         Vector3 l_Direction = Vector3.zero;
@@ -119,7 +131,7 @@ public class PlayerController : MonoBehaviour
         }
 
         m_Animator.SetFloat("Movement", l_Direction.magnitude);
-        AnimatorStateInfo l_AnimatorStateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
+        
 
 
 
@@ -178,12 +190,25 @@ public class PlayerController : MonoBehaviour
     public void Kill()
     {
         m_Animator.SetBool("Dead", true);
-        --m_Lifes;
-        Restart();
     }
-    void Restart()
+    void RestartGame()
     {
-
+        --m_Lifes;
+        m_Animator.SetBool("Dead", false);
+        m_CurrentShootTime = 0.0f;
+        m_Grenades = 2;
+        transform.rotation = m_StartRotation;
+        transform.position = m_StartPosition;
+        m_AmmoContainer.Restart();
+        if (m_Lifes < 0)
+        {
+            SceneManager.LoadScene("MenuScene");
+        }
+        else
+        {
+            Camera.main.GetComponent<GameController>().RestartGame();
+        }
+        
     }
     bool CanShoot()
     {

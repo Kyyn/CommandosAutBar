@@ -13,6 +13,8 @@ public class FixedAIController : CAIController
     public Transform m_AmmoOutputTransform;
     Animator m_Animator;
     CharacterController m_CharacterController;
+    Vector3 m_StartPosition;
+    Quaternion m_StartRotation;
 
     // Use this for initialization
     void Start ()
@@ -23,6 +25,9 @@ public class FixedAIController : CAIController
         m_Animator = GetComponent<Animator>();
         CalcNextShootTime();
 
+        Camera.main.GetComponent<GameController>().AddEnemy(this);
+        m_StartRotation = transform.rotation;
+        m_StartPosition = transform.position;
     }
 
 	// Update is called once per frame
@@ -77,5 +82,14 @@ public class FixedAIController : CAIController
             Debug.Log("nova2");
             Kill();
         }
+    }
+    public override void RestartGame()
+    {
+        transform.rotation = m_StartRotation;
+        transform.position = m_StartPosition;
+        m_Animator.SetBool("Dead", false);
+        CalcNextShootTime();
+        m_AmmoContainer.Restart();
+        m_CharacterController.enabled = true;
     }
 }

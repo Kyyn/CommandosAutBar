@@ -9,6 +9,10 @@ public class CAIController : MonoBehaviour
     {
         Debug.LogError("this method must be overrided");
     }
+    public virtual void RestartGame()
+    {
+        Debug.LogError("this method must be overrided");
+    }
 }
 
 public class MovementAIController : CAIController
@@ -28,6 +32,8 @@ public class MovementAIController : CAIController
     public float m_BaseDistance = 5.0f;
     public float m_RandomDistance = 3.0f;
     Vector3 m_Destination;
+    Vector3 m_StartPosition;
+    Quaternion m_StartRotation;
 
     // Use this for initialization
     void Start ()
@@ -40,6 +46,9 @@ public class MovementAIController : CAIController
         CalcNextShootTime();
         m_DestinationSet = false;
 
+        Camera.main.GetComponent<GameController>().AddEnemy(this);
+        m_StartRotation = transform.rotation;
+        m_StartPosition = transform.position;
     }
 
 	// Update is called once per frame
@@ -119,5 +128,16 @@ public class MovementAIController : CAIController
             Kill();
         }
     }
-    
+    public override void RestartGame()
+    {
+        transform.rotation = m_StartRotation;
+        transform.position = m_StartPosition;
+        m_Animator.SetBool("Dead", false);
+        CalcNextShootTime();
+        m_AmmoContainer.Restart();
+        m_CharacterController.enabled = true;
+        m_DestinationSet = false;
+        m_NavMeshAgent.isStopped = true;
+    }
+
 }
