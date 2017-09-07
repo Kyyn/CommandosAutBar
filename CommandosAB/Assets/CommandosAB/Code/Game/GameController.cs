@@ -11,6 +11,8 @@ public class GameController : MonoBehaviour
     public GUISkin m_Skin;
     float m_CurentTime;
     List<CAIController> m_Enemies = new List<CAIController>();
+    public BossTankController m_BossTankController;
+
 
     // Use this for initialization
     void Start ()
@@ -55,5 +57,11 @@ public class GameController : MonoBehaviour
     public void AddEnemy(CAIController AIController)
     {
         m_Enemies.Add(AIController);
+    }
+    public void SetBossState()
+    {
+        m_BossTankController.gameObject.SetActive(true);
+        m_BossTankController.SetIntroCinematicsState();
+        Camera.main.GetComponent<CameraController>().SetBossState();
     }
 }

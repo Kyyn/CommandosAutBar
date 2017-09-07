@@ -43,6 +43,10 @@ public class Ammo : MonoBehaviour
         {
             collision.gameObject.GetComponent<CAIController>().Kill();
         }
+        else if (collision.gameObject.tag == "ExplodingBarrel")
+        {
+            collision.gameObject.GetComponent<ExplodingBarrel>().Explode();
+        }
         GameObject.Destroy(gameObject);
     }
 }

@@ -235,6 +235,11 @@ public class PlayerController : MonoBehaviour
         {
             Kill();
         }
+        else if (other.tag == "BossTrigger")
+        {
+            //m_GameController.SetBossState();
+            Camera.main.GetComponent<GameController>().SetBossState();
+        }
     }
 }
 
